@@ -26,11 +26,11 @@ bot.on ('message', msg => {
 
 function playMusic(msg){
     let voiceChannel = msg.member.voice.channel;
-    let x = msg.content.substr(jsonData.prefix.length);
-    if(jsonData.taunts.hasOwnProperty(x) && voiceChannel)
+    let id = msg.content.substr(jsonData.prefix.length);
+    if(jsonData.taunts.hasOwnProperty(id) && voiceChannel)
     {
-        play(voiceChannel, x)
-    }else if(x === '0')
+        play(voiceChannel, id, msg)
+    }else if(id === '0')
     {
         let command = Math.random() * 100;
         if (command > 98){
@@ -39,27 +39,45 @@ function playMusic(msg){
         {
             command = 1;
         }
-        console.log(command);
-        play(voiceChannel, Math.round(command).toString());
-    }else
+        play(voiceChannel, Math.round(command).toString(), msg);
+    }else if(id === 'help')
+    {
+        let helpMsg = JSON.stringify(jsonData.taunts);
+        let helpArray = helpMsg.split(",");
+        let msgString = "";
+        helpArray.forEach( item =>{
+            if (msgString.length<1900){
+                msgString += item + "\n";
+            }else
+            {
+                msg.reply(msgString);
+                msgString = "";
+            }
+        })
+        if(msgString.length){
+            msg.reply(msgString)
+        };
+    }
+    else
     {
         msg.reply(jsonData.taunts['def'])
     }
 };
 
-function play(voiceChannel,msg){
+function play(voiceChannel, id, msg){
+    msg.reply('Playing taunt ' + id + ' -> ' + jsonData.taunts[id]);
     voiceChannel.join().then( connection =>{
-        const dispatcher  = connection.play('./sound/' + msg + '.mp3');
+        const dispatcher  = connection.play('./sound/' + id + '.mp3');
         dispatcher.on('finish', end => voiceChannel.leave());
     })
     .catch(console.error);        
 }
 
 function replyMsg(msg){
-    const x = msg.content.substr(jsonData.prefix.length);
-    if(jsonData.taunts.hasOwnProperty(x))
+    const id = msg.content.substr(jsonData.prefix.length);
+    if(jsonData.taunts.hasOwnProperty(id))
     {
-        msg.reply(jsonData.taunts[x])
+        msg.reply(jsonData.taunts[id])
     }else
     {
         msg.reply(jsonData.taunts['def'])
