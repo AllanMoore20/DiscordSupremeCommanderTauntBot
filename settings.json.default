@@ -2,6 +2,7 @@
     "token": "",
     "token_test": "",
     "prefix": ";\\",
+    "sound": false;
     "taunts": {
         "1": "[Hall]: You will not stop the UEF!",
         "2": "[Hall]: Humanity will be saved!",

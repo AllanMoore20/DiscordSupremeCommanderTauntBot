@@ -9,6 +9,7 @@
   "author": "allan.moore20",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/opus": "^0.3.2",
     "discord.js": "^12.3.1"
   }
 }
