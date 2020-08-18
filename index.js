@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 let jsonData = require('./settings.json');
 
-bot.login(jsonData.token_test);
+bot.login(jsonData.token);
 
 bot.on('ready', () =>{
     console.log('This bot is online');
