@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 let jsonData = require('./settings.json');
 
-bot.login(jsonData.token);
+bot.login(jsonData.token_test);
 
 bot.on('ready', () =>{
     console.log('This bot is online');
@@ -25,23 +25,38 @@ bot.on ('message', msg => {
 })
 
 function playMusic(msg){
-    var voiceChannel = msg.member.voice.channel;
-    x = msg.content.substr(jsonData.prefix.length);
+    let voiceChannel = msg.member.voice.channel;
+    let x = msg.content.substr(jsonData.prefix.length);
     if(jsonData.taunts.hasOwnProperty(x) && voiceChannel)
     {
-        voiceChannel.join().then( connection =>{
-            const dispatcher  = connection.play('./sound/'+ x + '.mp3');
-            dispatcher.on('finish', end => voiceChannel.leave());
-        })
-        .catch(console.error);        
+        play(voiceChannel, x)
+    }else if(x === '0')
+    {
+        let command = Math.random() * 100;
+        if (command > 98){
+            command = 98;
+        }else if (command < 1)
+        {
+            command = 1;
+        }
+        console.log(command);
+        play(voiceChannel, Math.round(command).toString());
     }else
     {
         msg.reply(jsonData.taunts['def'])
     }
 };
 
+function play(voiceChannel,msg){
+    voiceChannel.join().then( connection =>{
+        const dispatcher  = connection.play('./sound/' + msg + '.mp3');
+        dispatcher.on('finish', end => voiceChannel.leave());
+    })
+    .catch(console.error);        
+}
+
 function replyMsg(msg){
-    x = msg.content.substr(jsonData.prefix.length);
+    const x = msg.content.substr(jsonData.prefix.length);
     if(jsonData.taunts.hasOwnProperty(x))
     {
         msg.reply(jsonData.taunts[x])
