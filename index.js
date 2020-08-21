@@ -45,14 +45,25 @@ function playMusic(msg){
         let helpMsg = JSON.stringify(jsonData.taunts);
         let helpArray = helpMsg.split(",");
         let msgString = "";
+        let clientNameLength = msg.author.tag.length;
         helpArray.forEach( item =>{
-            if (msgString.length<1900){
+            console.log(item);
+            if ((msgString.length + clientNameLength)<1900){
+                console.log("FIRST IF" + item);
                 msgString += item + "\n";
-            }else
+            }else if ((clientNameLength + msgString.length + item.length)<1999)
             {
+                console.log("SECOND IF" + item);
+                msgString += item + "\n";
                 msg.reply(msgString);
                 msgString = "";
-            }
+            }else
+            {
+                console.log("THIRD IF" + item);
+                msg.reply(msgString);
+                msgString = "";
+                msgString += item + "\n";
+            }  
         })
         if(msgString.length){
             msg.reply(msgString)
